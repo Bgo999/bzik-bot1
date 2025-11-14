@@ -1,0 +1,3 @@
+/assets/*  /assets/:splat  200
+/_nuxt/*  /_nuxt/:splat  200
+/*    /index.html   200

@@ -1,0 +1,1 @@
+import{r as e,j as r}from"./vendor-react-DVeNS4ev.js";var t=e.createContext(void 0),o=({client:o,children:n})=>(e.useEffect(()=>(o.mount(),()=>{o.unmount()}),[o]),r.jsx(t.Provider,{value:o,children:n}));export{o as Q};

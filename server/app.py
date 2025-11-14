@@ -25,8 +25,8 @@ except ImportError:
     def get_fallback_response(message, voice, context):
         return {"reply": "I'm having some connectivity issues right now, but I'm still here to chat!"}
 
-# Configure Flask - NO static serving (backend only)
-app = Flask(__name__)
+# Configure Flask to serve frontend + backend
+app = Flask(__name__, static_folder='static', static_url_path='')
 CORS(app)  # Enable CORS for all routes
 
 # API configuration
@@ -665,6 +665,18 @@ def health():
         resp = jsonify({"ok": False, "error": str(e)})
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp, 500
+
+# Serve React frontend for all non-API routes (SPA routing)
+@app.route('/')
+def serve_index():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    # Try to serve the file, fall back to index.html for SPA routing
+    if os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=False, threaded=True)

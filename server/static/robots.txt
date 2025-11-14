@@ -1,0 +1,57 @@
+# Robots.txt - Restrictive bot access for security
+User-agent: *
+Disallow: /.netlify/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /assets/
+Disallow: /*.json$
+Disallow: /*?*
+Disallow: /*&*
+
+# Allow legitimate search engines with crawl delay
+User-agent: Googlebot
+Crawl-delay: 1
+Allow: /
+
+User-agent: Bingbot
+Crawl-delay: 1
+Allow: /
+
+User-agent: Slurp
+Crawl-delay: 2
+Allow: /
+
+# Block known bad bots and scrapers
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: facebookexternalhit
+Disallow: /
+
+User-agent: Twitterbot
+Disallow: /
+
+User-agent: LinkedInBot
+Disallow: /
+
+User-agent: WhatsApp
+Disallow: /
+
+# Sitemap
+Sitemap: https://bzik.netlify.app/sitemap.xml
