@@ -669,14 +669,31 @@ def health():
 # Serve React frontend for all non-API routes (SPA routing)
 @app.route('/')
 def serve_index():
-    return send_from_directory(app.static_folder, 'index.html')
+    static_dir = os.path.abspath(app.static_folder)
+    index_path = os.path.join(static_dir, 'index.html')
+    if os.path.exists(index_path):
+        return send_from_directory(static_dir, 'index.html')
+    return jsonify({"error": "Frontend not found"}), 404
 
 @app.route('/<path:path>')
 def serve_static(path):
-    # Try to serve the file, fall back to index.html for SPA routing
-    if os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    return send_from_directory(app.static_folder, 'index.html')
+    # Don't serve API routes with this handler
+    if path.startswith('api/'):
+        return jsonify({"error": "Not found"}), 404
+    
+    static_dir = os.path.abspath(app.static_folder)
+    file_path = os.path.join(static_dir, path)
+    
+    # Try to serve the file if it exists
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return send_from_directory(static_dir, path)
+    
+    # Fall back to index.html for SPA routing
+    index_path = os.path.join(static_dir, 'index.html')
+    if os.path.exists(index_path):
+        return send_from_directory(static_dir, 'index.html')
+    
+    return jsonify({"error": "Not found"}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=False, threaded=True)
