@@ -1,0 +1,27 @@
+[build]
+  command = "cd bzik-clever-buddy-site-main && npm run build"
+  publish = "bzik-clever-buddy-site-main/dist"
+
+[build.environment]
+  PYTHON_VERSION = "3.9"
+
+[functions]
+  directory = "netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+
+# Environment variables note:
+# OPENROUTER_API_KEYS should be set in Netlify site settings

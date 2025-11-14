@@ -1,0 +1,17 @@
+[build]
+  # Build command
+  command = "cd bzik-clever-buddy-site-main && npm run build"
+  # Publish directory
+  publish = "bzik-clever-buddy-site-main/dist"
+
+[build.environment]
+  # Set Python version for functions
+  PYTHON_VERSION = "3.9"
+
+# Functions configuration
+[functions]
+  directory = "netlify/functions"
+
+# Environment variables note:
+# OPENROUTER_API_KEYS should be set in Netlify site settings
+# Example: sk-or-v1-xxx,sk-or-v1-yyy,...

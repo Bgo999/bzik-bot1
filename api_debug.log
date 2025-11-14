@@ -1,0 +1,755 @@
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 45. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: Hello! I'm here and ready to help. How can I assist you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user web_user, listening for 120s
+[Voice] Updated session for user web_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Let's be saying you're so good love you Peach
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Thank you for your kind words! I'm here to assist you with anything you need. How can I help you tod...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user web_user, listening for 120s
+[Voice] Updated session for user web_user: reset silence timer
+[Voice] Session web_user silent for 25.1s (timeout: 25s)
+[Voice] Silence detected for user web_user, sending prompt
+[Voice] Session web_user silent for 26.8s (timeout: 25s)
+[Voice] Session web_user silent for 29.1s (timeout: 25s)
+[Voice] Session web_user silent for 30.8s (timeout: 25s)
+[Voice] No response to silence prompt for 5.7s, ending session
+[Voice] Ended session for user web_user
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Yo what's up how you doing sir
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user web_user, listening for 120s
+[Voice] Updated session for user web_user: reset silence timer
+[Voice] Detected exit phrase: 'bye' in 'Goodbye shut up'
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Goodbye shut up
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: If you have any more questions or need assistance in the future, feel free to reach out. Have a grea...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Exit phrase detected from user web_user
+[Voice] Ended session for user web_user
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey how you doing my love
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 45. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user web_user, listening for 120s
+[Voice] Updated session for user web_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Like can you give me some
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to help with any questions or support you may need. Just let me know how I can assist you t...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user web_user, listening for 120s
+[Voice] Updated session for user web_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Can you tell me about
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to help with any questions or support you may need. Just let me know how I can assist you t...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user web_user, listening for 120s
+[Voice] Updated session for user web_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Tell me about sex position
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to provide information and support on a wide range of topics. If you have any specific ques...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user web_user, listening for 120s
+[Voice] Updated session for user web_user: reset silence timer
+[Voice] Detected exit phrase: 'bye' in 'Goodbye'
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Goodbye
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Goodbye! If you ever need assistance in the future, don't hesitate to reach out. Have a wonderful da...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Exit phrase detected from user web_user
+[Voice] Ended session for user web_user
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 45. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 45. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Trying key at position 1 out of 10
+[API Response] Got reply: Hello! I'm here to help you. How can I assist you today?...
+[Key Rotation] Success with key at position 1, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[API Response] Got reply: Hello! I'm here to help you. How can I assist you today?...
+[Key Rotation] Success with key at position 1, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: hi 
+[Custom Response] Using custom response for message: hi 
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: WHt do you think about life
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[API Response] Got reply: Life is a beautiful journey full of ups and downs, challenges, and opportunities for growth. It's im...
+[Key Rotation] Success with key at position 1, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Tell me about your business features
+[Custom Response] Using custom response for message: Tell me about your business features
+[Voice] Started session for user test_user, listening for 120s
+[Voice] Updated session for user test_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Waveforms test
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! How can I assist you with waveforms today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello
+[Custom Response] Using custom response for message: Hello
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Yeah
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Great! Feel free to share what's on your mind or how I can assist you today....
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Science garbage science
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to provide accurate and helpful information. If you have any questions or concerns about sc...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Do you believe there is more than one Universe
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: The concept of multiple universes, also known as the multiverse theory, is a fascinating and complex...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: So the dreams are a mirror of another of us in another universe?
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Dreams are a complex and mysterious aspect of human experience, and there are various interpretation...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello
+[Custom Response] Using custom response for message: Hello
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: What happens I don't know
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 45. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: It's okay not to have all the answers. If you have any questions or if there's anything specific you...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: You are a top G isolate
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Thank you for your kind words! I'm here to assist you with any questions or information you may need...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: All right
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: If you have any more questions or need assistance in the future, don't hesitate to reach out. Have a...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Where you from where you from where you from right where are you from
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I exist in the digital realm and do not have a physical location. My purpose is to assist and provid...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: All right
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: If you have any more questions or need assistance in the future, feel free to ask. Have a great day!...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Esta Jose Casada
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Let me think babe
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Take your time. I'm here whenever you're ready. Just let me know how I can assist you....
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: What do you think about life
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Life is a beautiful and complex journey filled with ups and downs, challenges, and opportunities for...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: All right what do you do for living who is your boss
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to assist you with any questions or tasks you may have. I don't have a boss in the traditio...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Who created you
+[Custom Response] Using custom response for message: Who created you
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Who is Edgar
+[Custom Response] Using custom response for message: Who is Edgar
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: who is Shalav 
+[Custom Response] Using custom response for message: who is Shalav 
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to assist you with anything you need. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: What they do for living
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm an AI assistant designed to help with a wide range of tasks and provide information and support....
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Yeah I'm here baby
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to assist you with any questions or tasks you have. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: ok
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 45. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: If you have any questions or need assistance, feel free to ask. I'm here to help!...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: ggg
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: If you have any questions or need assistance, feel free to ask. I'm here to help!...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Let me think
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Take your time to think. Whenever you're ready, feel free to let me know how I can assist you....
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: ok
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: If you have any questions or need assistance in the future, don't hesitate to reach out. Have a grea...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: 19 years okay you said
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to help with any questions or information you may need. Just let me know how I can assist y...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Yeah
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Feel free to ask me anything you'd like or share any information you need assistance with. I'm here ...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Yeah because we were chatting like he asked me why did you call me before I would came hi Loco and I said I was there with somebody talking to from your country wanted to connect you
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: It sounds like you had a conversation with someone about connecting with them through a call. If you...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Armenians Armenians are dangerous that's why
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: It's important to remember that it's not accurate or fair to make generalizations about any group of...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[Voice] Detected exit phrase: 'bye' in 'Goodbye'
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Goodbye
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Goodbye! If you have any more questions in the future, don't hesitate to reach out. Take care!...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Exit phrase detected from user demo_user
+[Voice] Ended session for user demo_user
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 44. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: hello
+[Custom Response] Using custom response for message: hello
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: hello from mobile test
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! How can I assist you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_test, listening for 120s
+[Voice] Updated session for user mobile_test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: I don't know why I ran away
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: It's okay to feel unsure or confused about your actions. If you'd like to talk about what happened o...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: test
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Sure, I'm here to help. What do you need assistance with?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: This is a test from mobile fix validation
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! Thank you for reaching out for mobile fix validation. How can I assist you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user validation_test, listening for 120s
+[Voice] Updated session for user validation_test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello
+[Custom Response] Using custom response for message: Hello
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Test message
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Got it! How can I assist you further with your test message?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: All right
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: If you ever want to talk or need assistance in the future, don't hesitate to reach out. Take care, a...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: What is your name?
+[Custom Response] Using custom response for message: What is your name?
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello there!
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 44. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: Hello! How can I assist you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user frontend_test, listening for 120s
+[Voice] Updated session for user frontend_test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello! How are you?
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 44. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user test_user, listening for 120s
+[Voice] Updated session for user test_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Can you tell me how busy can help me
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Certainly! Busy can help you organize your schedule, prioritize tasks, set reminders, and provide yo...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Can you tell me how busy can help me
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Certainly! Busy can help you organize your schedule, prioritize tasks, set reminders, and provide yo...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 44. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[API Response] Got reply: I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Are you okay
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Thank you for asking. I'm just a program, so I don't have feelings, but I'm here and ready to assist...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello
+[Custom Response] Using custom response for message: Hello
+[Voice] Started session for user test_user, listening for 120s
+[Voice] Updated session for user test_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: test
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here and ready to help. How can I assist you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user frontend_test, listening for 120s
+[Voice] Updated session for user frontend_test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello test
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! How can I assist you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user browser_test, listening for 120s
+[Voice] Updated session for user browser_test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello
+[Custom Response] Using custom response for message: Hello
+[Voice] Started session for user test, listening for 120s
+[Voice] Updated session for user test: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Test: Are you working?
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! Yes, I am here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user test_mobile, listening for 120s
+[Voice] Updated session for user test_mobile: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up what are you doing
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 44. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: I'm here to help you with any questions or tasks you have. How can I assist you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user demo_user, listening for 120s
+[Voice] Updated session for user demo_user: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hello how are you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763031454845_3ygnvqi, listening for 120s
+[Voice] Updated session for user mobile_1763031454845_3ygnvqi: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey how's it going
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 44. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: I'm doing well, thank you for asking. How can I assist you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user mobile_1763031454845_3ygnvqi, listening for 120s
+[Voice] Updated session for user mobile_1763031454845_3ygnvqi: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032230113_o8s5k7t, listening for 120s
+[Voice] Updated session for user mobile_1763032230113_o8s5k7t: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Let me
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Of course! Feel free to share what you need assistance with, and I'll do my best to help you....
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032230113_o8s5k7t, listening for 120s
+[Voice] Updated session for user mobile_1763032230113_o8s5k7t: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Who is your boss
+[Custom Response] Using custom response for message: Who is your boss
+[Voice] Started session for user mobile_1763032230113_o8s5k7t, listening for 120s
+[Voice] Updated session for user mobile_1763032230113_o8s5k7t: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: All right what do you do for living
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to assist you with any information or support you may need. Just let me know how I can help...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032230113_o8s5k7t, listening for 120s
+[Voice] Updated session for user mobile_1763032230113_o8s5k7t: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Is Edgar
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I'm here to assist you with any information or support you may need. Just let me know how I can help...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032230113_o8s5k7t, listening for 120s
+[Voice] Updated session for user mobile_1763032230113_o8s5k7t: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Who is the one who believe in God but doesn't follow any religion
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Someone who believes in God but does not follow any organized religion is often described as a spiri...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032230113_o8s5k7t, listening for 120s
+[Voice] Updated session for user mobile_1763032230113_o8s5k7t: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here to help you with whatever you need. How can I assist you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032670388_5jzh50x, listening for 120s
+[Voice] Updated session for user mobile_1763032670388_5jzh50x: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Yeah I'm here
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Great to hear! How can I assist you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032670388_5jzh50x, listening for 120s
+[Voice] Updated session for user mobile_1763032670388_5jzh50x: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: I don't know let me think
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Take your time to think about what you need. I'm here whenever you're ready....
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032670388_5jzh50x, listening for 120s
+[Voice] Updated session for user mobile_1763032670388_5jzh50x: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hi what's up how you doing
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Hello! I'm here and ready to assist you. How can I help you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032670388_5jzh50x, listening for 120s
+[Voice] Updated session for user mobile_1763032670388_5jzh50x: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Let me think
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: Take your time to gather your thoughts. Whenever you're ready, feel free to let me know how I can as...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032670388_5jzh50x, listening for 120s
+[Voice] Updated session for user mobile_1763032670388_5jzh50x: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: I'm
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: It's perfectly fine to take your time. Whenever you're ready, I'll be here to assist you....
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032670388_5jzh50x, listening for 120s
+[Voice] Updated session for user mobile_1763032670388_5jzh50x: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: I said I'm ready
+[Key Rotation] Trying key at position 0 out of 10
+[API Response] Got reply: I apologize for the misunderstanding. How can I assist you today?...
+[Key Rotation] Success with key at position 0, rotating to front
+[Voice] Started session for user mobile_1763032670388_5jzh50x, listening for 120s
+[Voice] Updated session for user mobile_1763032670388_5jzh50x: reset silence timer
+[get_chat_response] Starting with 10 keys
+[get_chat_response] Message: Hey what are you doing
+[Key Rotation] Trying key at position 0 out of 10
+[Key Rotation] Key at position 0 error: Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 50 tokens, but can only afford 44. To increase, visit https://openrouter.ai/settings/credits and upgrade to a paid account', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_34haPJci6sIrBPPFI4Ga2FAboGD'}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 0 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 1 out of 10
+[Key Rotation] Key at position 1 error: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}
+[Key Rotation] Full error traceback:
+[Key Rotation] Key at position 1 is rate-limited or quota-exhausted, moving to end
+[Key Rotation] Trying key at position 2 out of 10
+[API Response] Got reply: I'm here to assist you with any questions or concerns you may have. How can I help you today?...
+[Key Rotation] Success with key at position 2, rotating to front
+[Voice] Started session for user mobile_1763031454845_3ygnvqi, listening for 120s
+[Voice] Updated session for user mobile_1763031454845_3ygnvqi: reset silence timer

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bzik AI Chat</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
+        #message { width: 70%; padding: 10px; }
+        button { padding: 10px; margin: 5px; }
+        #voiceButton { background-color: #4CAF50; color: white; }
+        #voiceButton.listening { background-color: #f44336; }
+    </style>
+</head>
+<body>
+    <h1>Chat with Bzik AI</h1>
+    <label for="voiceSelect">Select Voice:</label>
+    <select id="voiceSelect"></select><br>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Type your message...">
+    <button id="send">Send</button>
+    <button id="voiceButton">🎤 Voice Input</button>
+
+    <script>
+        const chat = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send');
+        const voiceButton = document.getElementById('voiceButton');
+        const voiceSelect = document.getElementById('voiceSelect');
+
+        let recognition;
+        let isListening = false;
+        let manuallyStopped = false;
+
+        // Populate voice select
+        function populateVoiceSelect() {
+            const voices = speechSynthesis.getVoices();
+            console.log('Available voices:', voices.length);
+            voiceSelect.innerHTML = '';
+
+            const displayVoices = voices.filter(v => v.lang.startsWith('en'));
+
+            const femaleNames = ['Anna', 'Cruela', 'Afrika', 'Claire', 'Diana', 'Emma', 'Fiona', 'Grace', 'Hannah'];
+            const maleNames = ['Alex', 'Bob', 'Charlie', 'David', 'Ethan', 'Felix', 'George', 'Henry'];
+            const otherNames = ['Iris', 'Jack', 'Kate', 'Liam'];
+
+            let femaleCount = 0;
+            let maleCount = 0;
+            let otherCount = 0;
+
+            displayVoices.forEach(voice => {
+                const option = document.createElement('option');
+                option.value = voice.name;
+
+                // Give friendly names
+                let displayName;
+                if (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('woman') || voice.name.toLowerCase().includes('samantha') || voice.name.toLowerCase().includes('victoria')) {
+                    displayName = femaleNames[femaleCount % femaleNames.length] + ' (' + (femaleCount + 1) + ')';
+                    femaleCount++;
+                } else if (voice.name.toLowerCase().includes('male') || voice.name.toLowerCase().includes('man') || voice.name.toLowerCase().includes('alex') || voice.name.toLowerCase().includes('tom')) {
+                    displayName = maleNames[maleCount % maleNames.length] + ' (' + (maleCount + 1) + ')';
+                    maleCount++;
+                } else {
+                    displayName = otherNames[otherCount % otherNames.length] + ' (' + (otherCount + 1) + ')';
+                    otherCount++;
+                }
+
+                option.textContent = displayName;
+                voiceSelect.appendChild(option);
+            });
+
+            // Set default to first female-like
+            const defaultVoice = displayVoices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('victoria'));
+            if (defaultVoice) voiceSelect.value = defaultVoice.name;
+        }
+
+        // Voices may load asynchronously
+        populateVoiceSelect();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceSelect;
+        }
+
+        // Check for Speech Recognition support
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;  // Don't continuously listen, process one utterance at a time
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            let lastTranscriptTime = 0;
+            let lastTranscript = '';
+
+            recognition.onresult = (event) => {
+                const now = Date.now();
+                const transcript = event.results[event.results.length - 1][0].transcript.trim();
+                
+                // Prevent duplicate transcripts within 1 second
+                if (transcript === lastTranscript && (now - lastTranscriptTime) < 1000) {
+                    console.log('Duplicate transcript blocked:', transcript);
+                    return;
+                }
+                
+                lastTranscript = transcript;
+                lastTranscriptTime = now;
+                
+                console.log('Transcribed: ', transcript);
+                if (transcript) {
+                    messageInput.value = transcript;
+                    sendMessage();
+                }
+                
+                // Stop listening after processing one utterance
+                recognition.stop();
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                voiceButton.classList.remove('listening');
+                voiceButton.textContent = '🎤 Voice Input';
+                console.log('Speech recognition ended');
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                isListening = false;
+                voiceButton.classList.remove('listening');
+                voiceButton.textContent = '🎤 Voice Input';
+            };
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        let lastSentMessage = '';
+        let lastSentTime = 0;
+        let isWaitingForResponse = false;
+
+        voiceButton.addEventListener('click', () => {
+            if (!recognition) {
+                addMessage('Speech recognition not supported in this browser.');
+                return;
+            }
+            if (isListening) {
+                manuallyStopped = true;
+                recognition.stop();
+            } else {
+                manuallyStopped = false;
+                recognition.start();
+                isListening = true;
+                voiceButton.classList.add('listening');
+                voiceButton.textContent = '🎤 Listening...';
+            }
+        });
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Prevent duplicate sends (same message within 2 seconds or while waiting for response)
+            const now = Date.now();
+            if (isWaitingForResponse) {
+                console.log('Already waiting for response, ignoring duplicate send');
+                return;
+            }
+            
+            if (message === lastSentMessage && (now - lastSentTime) < 2000) {
+                console.log('Duplicate message blocked:', message);
+                addMessage('⚠️ Already sent that message, waiting for response...');
+                return;
+            }
+
+            lastSentMessage = message;
+            lastSentTime = now;
+            isWaitingForResponse = true;
+
+            addMessage('You: ' + message);
+            messageInput.value = '';
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message, user_id: 'web_user' })
+            })
+            .then(response => {
+                console.log('Fetch response status:', response.status);
+                console.log('Fetch response headers:', response.headers.get('content-type'));
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.text().then(text => { throw new Error(`HTTP ${response.status}: ${text}`); });
+                }
+            })
+            .then(data => {
+                console.log('Fetch response data:', data);
+                isWaitingForResponse = false;
+                if (data.reply) {
+                    addMessage('Bzik AI: ' + data.reply);
+                    speakText(data.reply);  // Speak the response
+                } else if (data.error) {
+                    addMessage('Error: ' + data.error);
+                } else {
+                    addMessage('Bzik AI: Undefined response');
+                }
+            })
+            .catch(error => {
+                console.log('Fetch error:', error);
+                isWaitingForResponse = false;
+                addMessage('Error: ' + error.message);
+            });
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = speechSynthesis.getVoices().find(v => v.name === voiceSelect.value);
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function addMessage(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
+</body>
+</html>

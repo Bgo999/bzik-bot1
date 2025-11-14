@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Detection Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .voice-item { padding: 10px; border: 1px solid #ccc; margin: 5px 0; }
+        .keyword { color: blue; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Available System Voices</h1>
+    <p>This page shows all available voices and helps identify which ones match Anna, Irish, Alexa, Jack, Alex</p>
+    
+    <div id="voices"></div>
+    
+    <script>
+        function showVoices() {
+            const voices = speechSynthesis.getVoices();
+            const container = document.getElementById('voices');
+            container.innerHTML = '';
+            
+            console.log(`Total voices available: ${voices.length}`);
+            
+            voices.forEach((voice, index) => {
+                const div = document.createElement('div');
+                div.className = 'voice-item';
+                
+                // Check for keywords
+                let keywords = [];
+                const nameLower = voice.name.toLowerCase();
+                if (nameLower.includes('anna')) keywords.push('ANNA');
+                if (nameLower.includes('irish') || nameLower.includes('siobhan')) keywords.push('IRISH');
+                if (nameLower.includes('alexa')) keywords.push('ALEXA');
+                if (nameLower.includes('jack')) keywords.push('JACK');
+                if (nameLower.includes('alex')) keywords.push('ALEX');
+                
+                let keywordHtml = keywords.length > 0 ? `<br><span class="keyword">MATCH: ${keywords.join(', ')}</span>` : '';
+                
+                div.innerHTML = `<strong>#${index}</strong> ${voice.name} (${voice.lang})${keywordHtml}`;
+                container.appendChild(div);
+            });
+        }
+        
+        // Get voices when loaded
+        if (speechSynthesis.getVoices().length > 0) {
+            showVoices();
+        } else {
+            speechSynthesis.onvoiceschanged = showVoices;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Bzik AI – Smart Chatbot Assistant</title>
+    <meta name="description" content="Bzik AI – your interactive chatbot powered by AI. Speak, chat, and explore futuristic features directly on bzik.netlify.app." />
+    <meta name="keywords" content="AI chatbot, voice assistant, Bzik, smart chat, conversational AI, Netlify chatbot, Bagrat AI, voice input assistant" />
+    <meta name="author" content="Bzik Team,, " />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://bzik.netlify.app" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <meta property="og:title" content="Bzik AI – Smart Chatbot Assistant" />
+    <meta property="og:description" content="Talk to Bzik, your futuristic AI chatbot with voice control and real-time conversation." />
+    <meta property="og:url" content="https://bzik.netlify.app" />
+    <meta property="og:image" content="https://bzik.netlify.app/cover.png" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@bzik_ai" />
+    <meta name="twitter:image" content="https://bzik.netlify.app/cover.png" />
+
+
+
+    <!-- Umami Analytics -->
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="8bfc43e7-4624-4487-915f-8affd494a5e6">
+    </script>
+
+    <!-- Force scroll to top with CSS and aggressive JavaScript -->
+    <style>
+      html, body {
+        scroll-behavior: auto !important;
+      }
+      html {
+        scroll-behavior: auto !important;
+      }
+    </style>
+    <script>
+      // Aggressive scroll reset - run immediately
+      (function() {
+        // Force scroll to top before anything else
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+
+        // Disable browser scroll restoration immediately
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+
+        // Clear any existing scroll position from session storage
+        try {
+          sessionStorage.removeItem('scrollPosition');
+          localStorage.removeItem('scrollPosition');
+        } catch (e) { /* ignore */ }
+
+        // Force scroll on multiple events to override all browser behaviors
+        function forceScrollToTop() {
+          window.scrollTo(0, 0);
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
+        }
+
+        // Run immediately
+        forceScrollToTop();
+
+        // Run on DOM ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', forceScrollToTop);
+        } else {
+          forceScrollToTop();
+        }
+
+        // Run on load
+        window.addEventListener('load', forceScrollToTop);
+
+        // Run multiple times with delays to override any restoration
+        setTimeout(forceScrollToTop, 0);
+        setTimeout(forceScrollToTop, 1);
+        setTimeout(forceScrollToTop, 5);
+        setTimeout(forceScrollToTop, 10);
+        setTimeout(forceScrollToTop, 50);
+        setTimeout(forceScrollToTop, 100);
+        setTimeout(forceScrollToTop, 250);
+        setTimeout(forceScrollToTop, 500);
+
+        // Mark completion
+        setTimeout(() => {
+          window.initialScrollResetComplete = true;
+        }, 100);
+
+        // Override any scroll restoration attempts
+        let scrollOverrideActive = true;
+        const originalScrollTo = window.scrollTo;
+        const originalScrollBy = window.scrollBy;
+
+        window.scrollTo = function(x, y) {
+          if (scrollOverrideActive && (x !== 0 || y !== 0)) {
+            return; // Block scroll attempts during override period
+          }
+          return originalScrollTo.apply(this, arguments);
+        };
+
+        window.scrollBy = function(x, y) {
+          if (scrollOverrideActive) {
+            return; // Block relative scroll attempts
+          }
+          return originalScrollBy.apply(this, arguments);
+        };
+
+        // Disable override after 1 second
+        setTimeout(() => {
+          scrollOverrideActive = false;
+          window.scrollTo = originalScrollTo;
+          window.scrollBy = originalScrollBy;
+        }, 1000);
+
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

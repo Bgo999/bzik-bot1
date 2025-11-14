@@ -1,0 +1,713 @@
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Send, Volume2, Loader2, Mic, MicOff } from "lucide-react";
+import { BzikCharacter } from "./BzikCharacter";
+import { cn } from "@/lib/utils";
+
+const voiceModes = [
+  { id: "friendly", label: "Friendly", mood: "happy" as const },
+  { id: "professional", label: "Professional", mood: "thinking" as const },
+  { id: "playful", label: "Playful", mood: "excited" as const },
+];
+
+const ttsVoices = [
+  { id: "Anna", label: "Anna" },
+  { id: "Kate", label: "Kate" },
+  { id: "Zoe", label: "Zoe" },
+  { id: "Alex", label: "Alex" },
+  { id: "Samantha", label: "Samantha" },
+];
+
+export const InteractiveDemo = React.memo(() => {
+  const [messages, setMessages] = useState([
+    { role: "assistant", content: "Hey! I'm Bzik. Ask me anything about your business!" }
+  ]);
+  const [isOpen, setIsOpen] = useState(true);
+  
+  // Auto-scroll function with smooth behavior
+  const scrollToBottom = useCallback(() => {
+    const messagesContainer = document.querySelector('.messages-container');
+    if (messagesContainer) {
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, []);
+
+  // Ensure chat is fully visible when demo is clicked
+  const ensureChatVisible = useCallback(() => {
+    const demoElement = document.getElementById('interactive-demo');
+    if (demoElement) {
+      demoElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, []);
+  const [input, setInput] = useState("");
+  const [voice, setVoice] = useState("friendly");
+  const [aiVoice, setAiVoice] = useState("friendly"); // Separate state for AI personality
+  const [ttsVoice, setTtsVoice] = useState("Anna");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [scrollDepth, setScrollDepth] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [continuousMode, setContinuousMode] = useState(false);
+  const [alwaysListening, setAlwaysListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const synthRef = useRef<SpeechSynthesis | null>(null);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const element = document.getElementById('interactive-demo');
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+      const depth = Math.max(0, Math.min(1,
+        (window.innerHeight - rect.top) / window.innerHeight
+      ));
+      setScrollDepth(depth);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Initialize speech recognition and synthesis
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false; // Stop after each recognition, manually restart after AI response
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
+
+      recognitionRef.current.onstart = () => {
+        console.log('Speech recognition onstart fired - microphone activated');
+        setIsListening(true);
+        // Start inactivity timer (60 minutes) to disable always listening
+        if (inactivityTimerRef.current) {
+          clearTimeout(inactivityTimerRef.current);
+        }
+        console.log('⏰ Starting 15-minute listening timer');
+        inactivityTimerRef.current = setTimeout(() => {
+          console.log('⏰ Listening timer expired - disabling always listening');
+          setAlwaysListening(false);
+          setContinuousMode(false);
+          if (recognitionRef.current) {
+            recognitionRef.current.stop();
+          }
+        }, 15 * 60 * 1000); // 15 minutes
+      };
+
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Speech recognition result received:', transcript);
+        setInput(transcript);
+
+        // Check for goodbye phrases and disable always listening
+        const isGoodbye = transcript.toLowerCase().includes('bye') ||
+                         transcript.toLowerCase().includes('goodbye') ||
+                         transcript.toLowerCase().includes('see you') ||
+                         transcript.toLowerCase().includes('talk later') ||
+                         transcript.toLowerCase().includes('good night');
+        if (isGoodbye) {
+          setAlwaysListening(false);
+          setContinuousMode(false);
+        }
+
+        // Auto-send message when speech recognition completes
+        if (transcript.trim()) {
+          setTimeout(() => {
+            const userMessage = transcript.trim();
+            setInput(""); // Clear input
+            setIsLoading(true);
+
+            // Stop any current speech
+            if (synthRef.current) {
+              synthRef.current.cancel();
+            }
+
+            // Add user message immediately
+            setMessages(prev => [...prev, { role: "user", content: userMessage }]);
+            scrollToBottom(); // Scroll after user message
+
+            // Send to API
+            fetch('http://127.0.0.1:5000/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: userMessage, user_id: 'demo_user', voice: aiVoice })
+            })
+            .then(r => r.json())
+            .then(data => {
+              setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+              speakText(data.reply);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              const fallback = "Hey, I'm having a bit of trouble right now, but I'm here. Let's try again.";
+              setMessages(prev => [...prev, { role: "assistant", content: fallback }]);
+              speakText(fallback);
+            })
+            .finally(() => {
+              setIsLoading(false);
+            });
+          }, 500);
+          // Enable continuous mode after first voice input
+          setAlwaysListening(true);
+        }
+      };
+
+      recognitionRef.current.onend = () => {
+        console.log('Speech recognition onend fired');
+        setIsListening(false);
+        
+        // If we're in always listening mode and not speaking, restart recognition
+        if (alwaysListening && !synthRef.current?.speaking) {
+          const restartRecognition = (retryCount = 0) => {
+            try {
+              setTimeout(() => {
+                if (!synthRef.current?.speaking && alwaysListening) {
+                  recognitionRef.current.start();
+                  setIsListening(true);
+                  console.log('🎙️ Recognition restarted successfully');
+                }
+              }, Math.min(150 * (retryCount + 1), 1000)); // Exponential backoff with max 1s delay
+            } catch (error) {
+              console.error('Failed to restart recognition:', error);
+              if (retryCount < 3) {
+                console.log(`Retrying recognition restart (attempt ${retryCount + 1})...`);
+                restartRecognition(retryCount + 1);
+              }
+            }
+          };
+          
+          restartRecognition();
+        }
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+    }
+
+    // Initialize text-to-speech
+    synthRef.current = window.speechSynthesis;
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+      }
+      if (synthRef.current) {
+        synthRef.current.cancel();
+      }
+    };
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert('Speech recognition is not supported in your browser. Please use Chrome, Edge, or Safari.');
+      return;
+    }
+
+    if (alwaysListening) {
+      setAlwaysListening(false);
+      setContinuousMode(false);
+      if (isListening) {
+        recognitionRef.current.stop();
+      }
+    } else {
+      // Request microphone permission before starting speech recognition
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(() => {
+            // Permission granted, start speech recognition
+            setAlwaysListening(true);
+            setContinuousMode(true);
+            try {
+              recognitionRef.current.start();
+            } catch (error) {
+              console.error('Failed to start speech recognition:', error);
+              alert('Failed to start speech recognition. Please check microphone permissions.');
+              setAlwaysListening(false);
+              setContinuousMode(false);
+            }
+          })
+          .catch((error) => {
+            console.error('Microphone permission denied:', error);
+            alert('Microphone permission is required for voice input. Please allow microphone access and try again.');
+            setAlwaysListening(false);
+            setContinuousMode(false);
+          });
+      } else {
+        // Fallback for older browsers
+        try {
+          setAlwaysListening(true);
+          setContinuousMode(true);
+          recognitionRef.current.start();
+        } catch (error) {
+          console.error('Failed to start speech recognition:', error);
+          alert('Failed to start speech recognition. Please check microphone permissions.');
+          setAlwaysListening(false);
+          setContinuousMode(false);
+        }
+      }
+    }
+  };
+
+  const sendMessage = async (message: string) => {
+    if (!message.trim() || isLoading) return;
+
+    const userMessage = message.trim();
+    setInput(""); // Clear input regardless of source
+    setIsLoading(true);
+
+    // Stop any current speech when user sends message
+    if (synthRef.current) {
+      synthRef.current.cancel();
+    }
+
+    // Add user message immediately
+    setMessages(prev => {
+      const newMessages = [...prev, { role: "user", content: userMessage }];
+      // Limit to last 10 messages to prevent overflow
+      return newMessages.length > 10 ? newMessages.slice(-10) : newMessages;
+    });
+
+    try {
+      // First check if the server is responding
+      try {
+        const healthCheck = await fetch('http://127.0.0.1:5000/health', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (!healthCheck.ok) {
+          throw new Error('Backend server is not healthy');
+        }
+      } catch (healthError) {
+        throw new Error('Cannot connect to backend server');
+      }
+
+      const maxRetries = 3;
+      let retryCount = 0;
+      let response;
+      let lastError;
+      
+      while (retryCount < maxRetries) {
+        try {
+          response = await fetch('http://127.0.0.1:5000/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: userMessage,
+              user_id: 'demo_user',
+              voice: aiVoice,
+              retry_count: retryCount
+            }),
+          });
+
+          // Check if response is JSON and contains reply
+          const data = await response.json();
+          if (!data || typeof data.reply !== 'string') {
+            throw new Error('Invalid response format from server');
+          }
+
+          // Success! Return the data
+          return data;
+
+        } catch (error) {
+          lastError = error;
+          console.error(`Attempt ${retryCount + 1} failed:`, error);
+
+          // Handle specific errors
+          if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+            console.log('Network error, retrying...');
+          } else if (response?.status === 429) {
+            console.log('Rate limited, waiting before retry...');
+            await new Promise(resolve => setTimeout(resolve, 2000 * (retryCount + 1)));
+          } else if (response?.status === 403) {
+            console.log('API key rotation needed, waiting...');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+
+          retryCount++;
+          if (retryCount < maxRetries) {
+            await new Promise(resolve => 
+              setTimeout(resolve, Math.min(1000 * Math.pow(2, retryCount), 10000))
+            );
+          }
+        }
+      }
+
+      throw lastError || new Error('Failed to get response after retries');
+
+      const data = await sendMessage(userMessage);
+      
+      if (data && data.reply) {
+        // Add bot response
+        setMessages(prev => {
+          const newMessages = [...prev, { role: "assistant", content: data.reply }];
+          return newMessages.length > 10 ? newMessages.slice(-10) : newMessages;
+        });
+        scrollToBottom();
+        speakText(data.reply);
+      }
+    } catch (error) {
+      console.error('Error calling bot API:', error);
+      
+      // Provide more specific error messages based on the error type
+      let errorMessage = "I'm having some technical difficulties. Let me try to fix that for you.";
+      
+      if (error.message.includes('Cannot connect to backend') || 
+          error.message.includes('Failed to fetch')) {
+        errorMessage = "I can't reach my server right now. Please check your internet connection and try again in a moment.";
+      } else if (error.message.includes('rate limit')) {
+        errorMessage = "I'm getting a lot of requests right now. Please wait a moment before trying again.";
+      } else if (error.message.includes('API key')) {
+        errorMessage = "I'm updating my connection settings. Please try again in a few seconds.";
+      } else if (error.message.includes('Invalid response format')) {
+        errorMessage = "I received an unexpected response. Let me reconfigure and try again.";
+      }
+
+      setMessages(prev => [...prev, { role: "assistant", content: errorMessage }]);
+      speakText(errorMessage);
+
+      // If it's a connection issue, try to reconnect after a delay
+      if (error.message.includes('Cannot connect to backend')) {
+        setTimeout(async () => {
+          try {
+            const healthCheck = await fetch('http://127.0.0.1:5000/health');
+            if (healthCheck.ok) {
+              const reconnectMsg = "I'm back online now! Feel free to try your request again.";
+              setMessages(prev => [...prev, { role: "assistant", content: reconnectMsg }]);
+              speakText(reconnectMsg);
+            }
+          } catch (e) {
+            // Silently fail if reconnection check fails
+            console.error('Reconnection attempt failed:', e);
+          }
+        }, 5000);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSend = () => {
+    sendMessage(input);
+  };
+
+  const sendVoiceMessage = (message: string) => {
+    sendMessage(message);
+  };
+
+  const handleVoiceChange = (newVoice: string) => {
+    setTtsVoice(newVoice);
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 800);
+  };
+
+  // Function to handle text-to-speech
+  const speakText = useCallback((text: string, onEnd?: () => void) => {
+    if (synthRef.current && text) {
+      // Cancel any current speech
+      synthRef.current.cancel();
+
+      // Stop mic while speaking to prevent feedback
+      if (recognitionRef.current && isListening) {
+        recognitionRef.current.stop();
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 0.8;
+
+      // Use the selected TTS voice
+      const voices = synthRef.current.getVoices();
+      let selectedVoice = voices.find(voice =>
+        voice.name.toLowerCase().includes(ttsVoice.toLowerCase()) ||
+        voice.name.toLowerCase().includes(ttsVoice.toLowerCase().split(' ')[0])
+      );
+
+      // Fallback to a suitable voice if the exact match isn't found
+      if (!selectedVoice) {
+        selectedVoice = voices.find(voice =>
+          voice.name.toLowerCase().includes('female') ||
+          voice.name.toLowerCase().includes('karen') ||
+          voice.name.toLowerCase().includes('samantha') ||
+          voice.name.toLowerCase().includes('alex')
+        ) || voices[0];
+      }
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+
+      utterance.onend = () => {
+        console.log('TTS utterance.onend fired');
+
+        // Always restart microphone after speech ends, with a small delay
+        if (recognitionRef.current) {
+          console.log('🎙️ Restarting mic after speech...');
+          try {
+            // Small delay to prevent feedback and ensure clean transition
+            setTimeout(() => {
+              if (alwaysListening) {  // Check for alwaysListening instead of !isListening
+                recognitionRef.current.start();
+                setIsListening(true);
+                // Reset inactivity timer
+                if (inactivityTimerRef.current) {
+                  clearTimeout(inactivityTimerRef.current);
+                }
+                inactivityTimerRef.current = setTimeout(() => {
+                  console.log('⏰ Inactivity timer reset');
+                }, 15 * 60 * 1000); // 15 minutes
+              }
+            }, 150); // Reduced delay for faster response
+          } catch (error) {
+            console.error('❌ Failed to restart mic:', error);
+            // Retry once on error
+            setTimeout(() => {
+              try {
+                recognitionRef.current?.start();
+                setIsListening(true);
+              } catch (retryError) {
+                console.error('❌ Retry failed:', retryError);
+              }
+            }, 500);
+          }
+        }
+
+        if (onEnd) onEnd();
+      };
+
+      synthRef.current.speak(utterance);
+    }
+  }, [isListening, ttsVoice]);
+
+    const currentMood = voiceModes.find(v => v.id === aiVoice)?.mood || "happy";
+
+  // Update document title when chat state changes
+  useEffect(() => {
+    if (!isOpen && messages.length > 1) {
+      document.title = "💬 Message from Bzik";
+    } else {
+      document.title = "Bzik - Your AI Assistant";
+    }
+  }, [isOpen, messages]);
+
+  return (
+
+  // Function to handle closing the chat
+  const handleClose = () => {
+    setIsOpen(false);
+    // Stop listening when chat is closed
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
+  };
+
+  return (
+    <div className="relative">
+      {/* Floating chat button - moved outside main chat container */}
+      {!isOpen && (
+        <Button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 rounded-full p-6 shadow-lg bg-primary hover:bg-primary/90 text-primary-foreground z-50 animate-slide-up"
+          size="lg"
+        >
+          <div className="flex items-center gap-2">
+            <BzikCharacter 
+              size="small" 
+              interactive={false} 
+              mood="happy"
+              className="scale-75" // Make the character slightly smaller
+            />
+            <span className="font-medium">Chat with Bzik</span>
+          </div>
+        </Button>
+      )}
+
+      <div 
+        id="interactive-demo"
+        className={cn(
+          "fixed bottom-0 right-0 m-6 w-[400px] max-w-[calc(100vw-3rem)] max-h-[calc(100vh-3rem)]", // Fixed positioning with margins
+          "bg-card/95 backdrop-blur-md border-2 border-primary/40 rounded-3xl overflow-hidden shadow-holographic",
+          "transition-all duration-300 transform",
+          isOpen ? "translate-y-0 opacity-100" : "translate-y-[120%] opacity-0 pointer-events-none"
+        )}
+        style={{
+          transform: `scale(${0.95 + scrollDepth * 0.05})`,
+          boxShadow: `0 0 ${40 + scrollDepth * 60}px hsl(190 100% 52% / ${0.2 + scrollDepth * 0.3})`
+        }}
+      >
+        {/* Subtle shimmer - reduced opacity */}
+        <div className="absolute inset-0 gradient-holographic opacity-5 pointer-events-none" />
+
+      {/* Close button */}
+      <Button
+        onClick={handleClose}
+        variant="ghost"
+        size="icon"
+        className="absolute top-4 right-4 z-20 hover:bg-primary/10"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-5 h-5"
+        >
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </Button>
+      
+      {/* Voice selector */}
+      <div className="relative z-10 p-6 border-b border-primary/20 bg-card/80 backdrop-blur-sm">
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Personality:</span>
+            <Select value={aiVoice} onValueChange={setAiVoice}>
+              <SelectTrigger className="w-36">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {voiceModes.map(voiceMode => (
+                  <SelectItem key={voiceMode.id} value={voiceMode.id}>
+                    {voiceMode.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Volume2 className="w-5 h-5 text-primary" />
+            <Select value={ttsVoice} onValueChange={handleVoiceChange}>
+              <SelectTrigger
+                className={cn(
+                  "w-32 transition-all duration-300",
+                  isAnimating && "animate-bounce bg-blue-100 border-blue-300 text-blue-800 shadow-blue-200"
+                )}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="[&_[data-radix-select-viewport]]:[&_[data-radix-select-item]:focus]:bg-blue-100 [&_[data-radix-select-viewport]]:[&_[data-radix-select-item]:focus]:text-blue-800 [&_[data-radix-select-viewport]]:[&_[data-radix-select-item][data-state=checked]]:bg-blue-100 [&_[data-radix-select-viewport]]:[&_[data-radix-select-item][data-state=checked]]:text-blue-800">
+                {ttsVoices.map(voiceOption => (
+                  <SelectItem key={voiceOption.id} value={voiceOption.id}>
+                    {voiceOption.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      {/* Chat messages */}
+      <div className="relative z-10 p-6 md:p-8 space-y-4 md:space-y-6 h-[300px] md:h-[500px] overflow-y-auto messages-container">
+        {messages.map((msg, idx) => (
+          <div 
+            key={idx}
+            className={cn(
+              "flex gap-4 animate-slide-up",
+              msg.role === 'user' ? 'justify-end' : 'justify-start'
+            )}
+          >
+            {msg.role === 'assistant' && (
+              <div className="flex-shrink-0 mt-2">
+                <BzikCharacter 
+                  size="small" 
+                  interactive={false} 
+                  mood={currentMood}
+                />
+              </div>
+            )}
+            <div 
+              className={cn(
+                "max-w-[70%] p-5 rounded-2xl transition-all duration-500",
+                msg.role === 'user'
+                  ? 'bg-primary text-primary-foreground shadow-lg'
+                  : 'bg-muted/90 border border-primary/30 text-foreground'
+              )}
+            >
+              {msg.content}
+            </div>
+          </div>
+        ))}
+        
+        {isLoading && (
+          <div className="flex gap-4 animate-slide-up">
+            <BzikCharacter size="small" interactive={false} mood="thinking" />
+            <div className="bg-muted/90 border border-primary/30 p-5 rounded-2xl">
+              <div className="flex gap-2">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse-glow" />
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse-glow animation-delay-200" />
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse-glow animation-delay-300" />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Input area */}
+      <div className="relative z-10 border-t border-primary/20 p-6 bg-card/80 backdrop-blur-sm">
+        <div className="flex gap-3">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            placeholder={isListening ? "Listening..." : "Ask Bzik anything..."}
+            className={cn(
+              "flex-1 bg-muted/50 border-2 border-primary/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary glow-primary transition-all text-lg",
+              isListening && "border-blue-500 glow-blue-500 ring-4 ring-blue-400/20"
+            )}
+          />
+          <Button
+            onClick={toggleListening}
+            variant="outline"
+            size="lg"
+            className={cn(
+              "px-4 transition-colors",
+              isListening && "bg-red-500 hover:bg-red-600 border-red-500 text-white"
+            )}
+            title={isListening ? "Stop listening" : "Start listening"}
+          >
+            {isListening ? (
+              <MicOff className="w-5 h-5 animate-pulse" />
+            ) : (
+              <Mic className="w-5 h-5" />
+            )}
+          </Button>
+          <Button
+            onClick={handleSend}
+            variant="hero"
+            size="lg"
+            className="px-8"
+          >
+            <Send className="w-5 h-5" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+});

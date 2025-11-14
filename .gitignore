@@ -1,0 +1,12 @@
+﻿node_modules/
+dist/
+*.pyc
+__pycache__/
+.env
+chat_memory.json
+
+# Local file with OpenRouter keys (do NOT commit your keys)
+openrouter_keys_local.py
+
+# Local Netlify folder
+.netlify

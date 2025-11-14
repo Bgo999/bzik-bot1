@@ -1,0 +1,5 @@
+flask
+flask-cors
+requests
+
+# If you use any other python libs in functions, add them here.

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bzik AI Chat</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #333; text-align: center; }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        #chat { 
+            border: 1px solid #ddd; 
+            height: 400px; 
+            overflow-y: auto; 
+            padding: 15px; 
+            margin-bottom: 15px;
+            background: #fafafa;
+            border-radius: 5px;
+            line-height: 1.6;
+        }
+        .message-user {
+            color: #0066cc;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .message-bot {
+            color: #009900;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .message-error {
+            color: #cc0000;
+            margin: 10px 0;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        #message { 
+            flex: 1;
+            min-width: 200px;
+            padding: 12px; 
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button { 
+            padding: 12px 20px; 
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #0066cc;
+            color: white;
+            transition: background 0.3s;
+        }
+        button:hover { background: #0052a3; }
+        button:disabled { 
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #voiceButton { 
+            background: #ff6b6b;
+        }
+        #voiceButton:hover { background: #ff5252; }
+        #voiceButton.listening { 
+            background: #ff0000;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .voice-select-container {
+            margin-bottom: 15px;
+        }
+        select {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chat with Bzik AI</h1>
+        
+        <div class="voice-select-container">
+            <label for="voiceSelect">Select Voice:</label>
+            <select id="voiceSelect"></select>
+        </div>
+        
+        <div id="chat"></div>
+        
+        <div class="controls">
+            <input type="text" id="message" placeholder="Type your message...">
+            <button id="send">Send</button>
+            <button id="voiceButton">🎤 Microphone</button>
+        </div>
+        
+        <div class="info">
+            <p>Status: <span id="status">Ready</span></p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const chatDiv = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send');
+        const voiceButton = document.getElementById('voiceButton');
+        const voiceSelect = document.getElementById('voiceSelect');
+        const statusDiv = document.getElementById('status');
+
+        // State variables
+        let recognition = null;
+        let isListening = false;
+        let isWaitingForResponse = false;
+        let lastSentMessage = '';
+        let lastSentTime = 0;
+        let lastVoiceTranscript = '';
+        let voiceProcessed = false;
+        let recognitionActive = false;
+        let lastVoiceEventTime = 0;      // Track time of last voice event
+        let voiceEventCount = 0;         // Count events in this recognition session
+        let maxConfidenceTranscript = '';  // Track highest confidence transcript
+        let maxConfidence = 0;
+        let currentUserId = 'web_user';  // Current user ID for session tracking
+        let voiceSessionActive = false;  // Track if backend voice session is active
+        let voiceSessionPoller = null;   // Interval for polling voice status
+        let lastMessageFromVoice = false; // Track if last message was from voice input
+
+        // Initialize voice select - ONLY show: Anna, Irish, Alexa, Jack, Alex
+        function populateVoices() {
+            const voices = speechSynthesis.getVoices();
+            voiceSelect.innerHTML = '';
+            
+            // EXPLICIT voice mapping - prefer female voices for Anna/Irish/Alexa
+            const voiceMap = [
+                { display: 'Anna', keywords: ['zira', 'female', 'anna', 'woman', 'girl'], preferFemale: true, genders: ['Female'] },
+                { display: 'Irish', keywords: ['siobhan', 'irish', 'female'], preferFemale: true, genders: ['Female'] },
+                { display: 'Alexa', keywords: ['alexa', 'female'], preferFemale: true, genders: ['Female'] },
+                { display: 'Jak', keywords: ['jak', 'male', 'man'], preferFemale: false, genders: ['Male'] },
+                { display: 'Alecx', keywords: ['alecx', 'alex', 'male', 'man'], preferFemale: false, genders: ['Male'] }
+            ];
+            
+            const foundVoices = [];
+            
+            // For each preferred voice, find the closest match
+            voiceMap.forEach(voiceInfo => {
+                let match = null;
+                
+                // First try to find by gender property
+                if (voiceInfo.genders && voiceInfo.genders.length > 0) {
+                    match = voices.find(v => {
+                        return voiceInfo.genders.some(g => v.name && v.name.includes(g)) &&
+                               voiceInfo.keywords.some(kw => v.name.toLowerCase().includes(kw));
+                    });
+                }
+                
+                // Then try to find exact gender preference by name
+                if (!match && voiceInfo.preferFemale) {
+                    match = voices.find(v => {
+                        const voiceName = v.name.toLowerCase();
+                        const isFemale = v.name.includes('Female') || v.name.includes('female') || 
+                                       voiceName.includes('woman') || voiceName.includes('girl') ||
+                                       voiceName.includes('zira') || voiceName.includes('siobhan');
+                        return isFemale && voiceInfo.keywords.some(kw => voiceName.includes(kw));
+                    });
+                }
+                
+                // Fall back to keyword matching without gender preference
+                if (!match) {
+                    match = voices.find(v => {
+                        const voiceName = v.name.toLowerCase();
+                        return voiceInfo.keywords.some(kw => voiceName.includes(kw));
+                    });
+                }
+                
+                if (match && !foundVoices.find(fv => fv.name === match.name)) {
+                    console.log('[VOICE SELECT] Matched ' + voiceInfo.display + ' to voice: ' + match.name);
+                    foundVoices.push({ display: voiceInfo.display, voice: match, isFemale: voiceInfo.preferFemale });
+                }
+            });
+            
+            // Add only the 5 found voices
+            foundVoices.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.voice.name;
+                option.textContent = item.display + (item.isFemale ? ' (Female)' : '');
+                voiceSelect.appendChild(option);
+            });
+            
+            // If no voices found, use browser defaults but show our names
+            if (voiceSelect.options.length === 0) {
+                voiceMap.forEach((voiceInfo, index) => {
+                    const option = document.createElement('option');
+                    option.value = index; // Use index as fallback
+                    option.textContent = voiceInfo.display;
+                    voiceSelect.appendChild(option);
+                });
+            }
+            
+            // Set first voice as default
+            if (voiceSelect.options.length > 0) {
+                voiceSelect.selectedIndex = 0;
+            }
+            
+            console.log('[VOICE SELECT] Available voices:', foundVoices.map(v => `${v.display} (${v.voice.name})`));
+        }
+
+        // Populate voices when available
+        populateVoices();
+        speechSynthesis.onvoiceschanged = populateVoices;
+
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;        // Stop after first result
+            recognition.interimResults = false;    // Don't send interim results
+            recognition.maxAlternatives = 1;       // Only one alternative
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                console.log('[VOICE] Recognition STARTED');
+                recognitionActive = true;
+                isListening = true;
+                voiceProcessed = false;
+                lastVoiceTranscript = '';
+                lastVoiceEventTime = Date.now();
+                voiceEventCount = 0;
+                maxConfidenceTranscript = '';
+                maxConfidence = 0;
+                voiceButton.classList.add('listening');
+                voiceButton.textContent = '🎤 Listening...';
+                statusDiv.textContent = 'Listening...';
+            };
+
+            recognition.onresult = (event) => {
+                // DON'T PROCESS HERE - just collect the best result
+                const lastResult = event.results[event.results.length - 1];
+                const transcript = lastResult[0].transcript.trim();
+                const confidence = lastResult[0].confidence;
+                
+                voiceEventCount++;
+                console.log('[VOICE] Event #' + voiceEventCount + ': "' + transcript + '" (confidence: ' + confidence.toFixed(2) + ', isFinal: ' + lastResult.isFinal + ')');
+                
+                if (!transcript) {
+                    return;
+                }
+                
+                // Track the longest and highest confidence transcript
+                if (confidence > maxConfidence || transcript.length > maxConfidenceTranscript.length) {
+                    if (confidence > maxConfidence) {
+                        console.log('[VOICE] Better confidence: ' + confidence.toFixed(2));
+                        maxConfidence = confidence;
+                    }
+                    if (transcript.length > maxConfidenceTranscript.length) {
+                        console.log('[VOICE] Longer transcript: ' + transcript);
+                    }
+                    maxConfidenceTranscript = transcript;
+                }
+            };
+
+            recognition.onend = () => {
+                console.log('[VOICE] Recognition ENDED after ' + voiceEventCount + ' events');
+                console.log('[VOICE] Best transcript: "' + maxConfidenceTranscript + '" (confidence: ' + maxConfidence.toFixed(2) + ')');
+                
+                recognitionActive = false;
+                isListening = false;
+                
+                // NOW process the best result we collected
+                if (!voiceProcessed && maxConfidenceTranscript && maxConfidenceTranscript.length > 0) {
+                    console.log('[VOICE] Processing best result: "' + maxConfidenceTranscript + '"');
+                    voiceProcessed = true;
+                    lastMessageFromVoice = true;  // Mark as voice input
+                    
+                    // Check for duplicate
+                    if (maxConfidenceTranscript === lastVoiceTranscript) {
+                        console.log('[VOICE] Duplicate! Ignoring.');
+                        lastMessageFromVoice = false;
+                    } else {
+                        lastVoiceTranscript = maxConfidenceTranscript;
+                        messageInput.value = maxConfidenceTranscript;
+                        
+                        setTimeout(() => {
+                            console.log('[VOICE] Sending message');
+                            sendMessage();
+                        }, 50);
+                    }
+                }
+                
+                // Cleanup
+                maxConfidenceTranscript = '';
+                maxConfidence = 0;
+                voiceProcessed = false;
+                voiceButton.classList.remove('listening');
+                voiceButton.textContent = '🎤 Microphone';
+                if (isWaitingForResponse) {
+                    statusDiv.textContent = 'Waiting for response...';
+                } else {
+                    statusDiv.textContent = 'Ready';
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech error:', event.error);
+                addMessage('Error: ' + event.error, 'error');
+                isListening = false;
+                voiceButton.classList.remove('listening');
+                voiceButton.textContent = '🎤 Microphone';
+                statusDiv.textContent = 'Error: ' + event.error;
+            };
+        } else {
+            voiceButton.disabled = true;
+            voiceButton.textContent = '🎤 Not supported';
+        }
+
+        // Voice button click handler
+        voiceButton.addEventListener('click', () => {
+            if (!recognition) {
+                addMessage('Speech recognition not supported in this browser', 'error');
+                return;
+            }
+
+            if (isListening) {
+                recognition.stop();
+            } else if (!isWaitingForResponse) {
+                try {
+                    recognition.start();
+                    statusDiv.textContent = 'Starting voice input...';
+                } catch (e) {
+                    console.log('Recognition already active:', e);
+                }
+            }
+        });
+
+        // Poll voice session status from backend
+        function pollVoiceSession() {
+            if (!voiceSessionActive || isWaitingForResponse) {
+                return;
+            }
+
+            fetch('/api/voice/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: currentUserId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('[VOICE SESSION] Status:', data);
+                
+                // Check if session should end
+                if (data.exit_triggered) {
+                    console.log('[VOICE SESSION] Exit triggered - no response after prompt, ending session');
+                    voiceSessionActive = false;
+                    if (voiceSessionPoller) {
+                        clearInterval(voiceSessionPoller);
+                        voiceSessionPoller = null;
+                    }
+                    if (isListening) {
+                        recognition.stop();
+                    }
+                    addMessage('Bzik AI: ' + (data.exit_message || 'Goodbye! See you soon.'), 'bot');
+                    voiceButton.classList.remove('listening');
+                    voiceButton.textContent = '🎤 Start Voice Chat';
+                    return;
+                }
+                
+                // If session ended (not active or shouldn't listen anymore)
+                if (!data.active || !data.should_listen) {
+                    console.log('[VOICE SESSION] Session ended (not active or should_listen=false)');
+                    voiceSessionActive = false;
+                    if (voiceSessionPoller) {
+                        clearInterval(voiceSessionPoller);
+                        voiceSessionPoller = null;
+                    }
+                    if (isListening) {
+                        recognition.stop();
+                    }
+                    voiceButton.classList.remove('listening');
+                    voiceButton.textContent = '🎤 Start Voice Chat';
+                    return;
+                }
+                
+                // If user is silent too long, send prompt
+                if (data.silent_for > 23 && !data.silence_prompt_sent) {
+                    console.log('[VOICE SESSION] User silent for ' + data.silent_for.toFixed(1) + 's, sending prompt');
+                    addMessage('Bzik AI: Hey, are you still there? Can I help you with anything?', 'bot');
+                    // Speak the prompt but DON'T restart listening - let backend handle timeout
+                    speakReply('Hey, are you still there? Can I help you with anything?');
+                    // Stop polling to let backend check for no-response timeout
+                    return;
+                }
+                
+                // Auto-start microphone if not already listening
+                if (!isListening && !recognitionActive && !isWaitingForResponse) {
+                    console.log('[VOICE SESSION] Auto-starting microphone');
+                    try {
+                        recognition.start();
+                        voiceButton.classList.add('listening');
+                        voiceButton.textContent = '🎤 Listening...';
+                    } catch (e) {
+                        console.log('[VOICE SESSION] Could not start recognition:', e);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('[VOICE SESSION] Poll error:', error);
+            });
+        }
+
+        // Start polling voice session after response
+        function startVoiceSessionPolling() {
+            if (voiceSessionPoller) {
+                clearInterval(voiceSessionPoller);
+            }
+            voiceSessionActive = true;
+            // Initial immediate poll to start listening ASAP
+            setTimeout(pollVoiceSession, 100);
+            // Then poll every 2 seconds
+            voiceSessionPoller = setInterval(pollVoiceSession, 2000);
+        }
+
+        // Stop polling voice session
+        function stopVoiceSessionPolling() {
+            voiceSessionActive = false;
+            if (voiceSessionPoller) {
+                clearInterval(voiceSessionPoller);
+                voiceSessionPoller = null;
+            }
+        }
+
+        // Send button and Enter key handler
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Send message function
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            
+            console.log('[SEND] sendMessage called with:', message);
+            
+            if (!message) {
+                statusDiv.textContent = 'Please enter a message';
+                return;
+            }
+
+            // AGGRESSIVE DUPLICATE PREVENTION
+            const now = Date.now();
+            
+            // 1. Block if already waiting for response (strict)
+            if (isWaitingForResponse) {
+                console.log('[SEND] BLOCKED: Already waiting for response');
+                statusDiv.textContent = 'Already waiting for response...';
+                return;
+            }
+
+            // 2. Block same message within 10 seconds (strict window)
+            if (message === lastSentMessage && (now - lastSentTime) < 10000) {
+                console.log('[SEND] BLOCKED: Duplicate message within 10 seconds');
+                statusDiv.textContent = 'Wait 10 seconds before sending the same message';
+                return;
+            }
+
+            // 3. Clear input field FIRST to prevent accidental re-sends
+            messageInput.value = '';
+            
+            console.log('[SEND] Sending message:', message);
+
+            // Update state IMMEDIATELY to prevent race conditions
+            lastSentMessage = message;
+            lastSentTime = now;
+            isWaitingForResponse = true;
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+            statusDiv.textContent = 'Sending...';
+
+            addMessage('You: ' + message, 'user');
+
+            // Send with timeout and error handling
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    message: message, 
+                    user_id: currentUserId,
+                    voice: 'friendly',
+                    is_voice_input: lastMessageFromVoice
+                }),
+                signal: controller.signal
+            })
+            .then(response => {
+                clearTimeout(timeoutId);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('[SEND] Got response:', data);
+                lastMessageFromVoice = false;  // Reset flag after sending
+                
+                // Only process if this is still the current message
+                if (data.reply) {
+                    addMessage('Bzik AI: ' + data.reply, 'bot');
+                    
+                    // Handle voice session info FIRST to check exit phrase
+                    if (data.voice_session) {
+                        const session = data.voice_session;
+                        console.log('[SEND] Voice session info:', session);
+                        
+                        if (session.exit_triggered) {
+                            // Exit phrase detected - speak the response but DON'T listen after
+                            console.log('[SEND] Exit phrase detected - speaking response then ending session');
+                            voiceSessionActive = false;  // Ensure session is marked inactive
+                            stopVoiceSessionPolling();
+                            if (isListening) {
+                                recognition.stop();
+                            }
+                            voiceButton.classList.remove('listening');
+                            voiceButton.textContent = '🎤 Start Voice Chat';
+                            // Speak the response but without listening (use speakReply not speakReplyThenListen)
+                            speakReply(data.reply);
+                        } else if (session.active && session.should_listen) {
+                            // Speak reply FIRST, then start listening AFTER speech finishes
+                            console.log('[SEND] Normal response - setting voiceSessionActive=true, calling speakReplyThenListen');
+                            voiceSessionActive = true;  // Ensure session is active
+                            speakReplyThenListen(data.reply);
+                        } else {
+                            // Session not active, just speak without listening
+                            console.log('[SEND] Voice session not active, speaking only');
+                            voiceSessionActive = false;
+                            speakReply(data.reply);
+                        }
+                    } else {
+                        // If no voice_session data, speak and try to start listening
+                        console.log('[SEND] No voice session data, setting voiceSessionActive=true, calling speakReplyThenListen');
+                        voiceSessionActive = true;  // Ensure session is active
+                        speakReplyThenListen(data.reply);
+                    }
+                } else {
+                    addMessage('Error: No reply received', 'error');
+                }
+            })
+            .catch(error => {
+                console.log('[SEND] Error:', error);
+                if (error.name !== 'AbortError') {
+                    addMessage('Error: ' + error.message, 'error');
+                }
+            })
+            .finally(() => {
+                clearTimeout(timeoutId);
+                isWaitingForResponse = false;
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                statusDiv.textContent = 'Ready';
+            });
+        }
+
+        // Speak the reply
+        function speakReply(text) {
+            if (!('speechSynthesis' in window)) {
+                return;
+            }
+
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = speechSynthesis.getVoices().find(v => v.name === voiceSelect.value);
+                
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+                
+                utterance.rate = 0.9;      // Slightly slower for clarity
+                utterance.pitch = 1.0;     // Normal pitch
+                utterance.volume = 1.0;    // Full volume
+                speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.error('Speech synthesis error:', e);
+            }
+        }
+
+        // Speak the reply and THEN start listening after speech finishes
+        function speakReplyThenListen(text) {
+            console.log('[SPEAK] speakReplyThenListen called, voiceSessionActive:', voiceSessionActive);
+            
+            if (!('speechSynthesis' in window)) {
+                // If speech synthesis not available, just start listening
+                console.log('[SPEAK] Speech synthesis not available, starting listening immediately');
+                if (voiceSessionActive) {
+                    startVoiceSessionPolling();
+                }
+                return;
+            }
+
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = speechSynthesis.getVoices().find(v => v.name === voiceSelect.value);
+                
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+                
+                utterance.rate = 0.9;      // Slightly slower for clarity
+                utterance.pitch = 1.0;     // Normal pitch
+                utterance.volume = 1.0;    // Full volume
+                
+                console.log('[SPEAK] Starting speech synthesis, text length:', text.length);
+                
+                // Start listening ONLY after speech finishes AND session is still active
+                utterance.onend = () => {
+                    console.log('[SPEAK] Speech finished callback triggered, voiceSessionActive:', voiceSessionActive);
+                    if (voiceSessionActive) {
+                        console.log('[SPEAK] ✅ Starting voice session polling');
+                        startVoiceSessionPolling();
+                    } else {
+                        console.log('[SPEAK] ❌ Session not active, not starting listening');
+                    }
+                };
+                
+                utterance.onerror = (event) => {
+                    console.log('[SPEAK] Speech error:', event.error, '- voiceSessionActive:', voiceSessionActive);
+                    if (voiceSessionActive) {
+                        console.log('[SPEAK] Starting voice session polling anyway');
+                        startVoiceSessionPolling();
+                    }
+                };
+                
+                speechSynthesis.speak(utterance);
+                console.log('[SPEAK] speechSynthesis.speak() called');
+            } catch (e) {
+                console.error('Speech synthesis error:', e);
+                // Start listening anyway if there's an error (and session is active)
+                if (voiceSessionActive) {
+                    startVoiceSessionPolling();
+                }
+            }
+        }
+
+        // Add message to chat
+        function addMessage(text, type = 'bot') {
+            const div = document.createElement('div');
+            
+            if (type === 'user') {
+                div.className = 'message-user';
+            } else if (type === 'error') {
+                div.className = 'message-error';
+            } else {
+                div.className = 'message-bot';
+            }
+            
+            div.textContent = text;
+            chatDiv.appendChild(div);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        // Initialize
+        statusDiv.textContent = 'Ready';
+        addMessage('Bzik AI: Hi! How can I help you?', 'bot');
+    </script>
+</body>
+</html>

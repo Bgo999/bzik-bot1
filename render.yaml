@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: bzik-backend
+    env: python
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2"
+    autoDeploy: true
+    envVars:
+      - key: OPENROUTER_API_KEYS
+        scope: secret
+      - key: PORT
+        value: "10000"

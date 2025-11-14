@@ -1,0 +1,6 @@
+flask
+flask-cors
+openai
+requests
+selenium
+webdriver-manager

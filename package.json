@@ -1,0 +1,20 @@
+{
+  "name": "bzik.bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm --prefix ./bzik-clever-buddy-site-main run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "flask": "^0.2.10",
+    "openai": "^6.7.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  }
+}
